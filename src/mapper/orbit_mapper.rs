@@ -1,7 +1,7 @@
 use crate::impl_get_field;
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
-use std::ops::{Deref, Index};
+use std::ops::{Index};
 
 #[derive(Debug)]
 pub struct Idx {
