@@ -1,5 +1,66 @@
+use crate::impl_get_field;
 use std::collections::HashMap;
-pub fn orbit_mapper() -> HashMap<u8, Vec<u8>> {
+use std::fmt::{Display, Formatter};
+use std::ops::{Deref, Index};
+
+#[derive(Debug)]
+pub struct Idx {
+    percent: String,
+    cell_num: u8, // номер ячейки
+    index: usize, // найденный индекс
+}
+
+impl Idx {
+    impl_get_field![
+        percent -> String,
+        cell_num -> u8,
+        index -> usize
+    ];
+}
+
+impl Display for Idx {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Idx [percent: {}, cell_num: {}, index: {}]",
+            self.percent, self.cell_num, self.index
+        )
+    }
+}
+
+pub fn convert_to_queue(position_hash: &HashMap<String, Vec<u8>>) -> Vec<Idx> {
+    let mut queue: Vec<Idx> = vec![];
+    for (percent, vec) in position_hash {
+        for cell_num in vec {
+            let idx = map_orbit(percent.clone(), *cell_num);
+            queue.push(idx)
+        }
+    }
+    queue.sort_by(|a, b| a.index().cmp(&b.index()));
+    queue
+}
+
+#[inline]
+fn map_orbit(percent: String, cell_num: u8) -> Idx {
+    let mapper = orbit_mapper();
+    let mut index = 0usize;
+    for (orbit_num, vec) in mapper {
+        for i in 0..vec.len() {
+            if cell_num == vec[i] {
+                index = orbit_num as usize * i;
+                return Idx {
+                    percent,
+                    cell_num: cell_num.clone(),
+                    index,
+                };
+            }
+        }
+    }
+    panic!("Невозможно найти ячейку с номером {cell_num} на картограмме. Проверьте входной файл");
+}
+
+#[inline]
+fn orbit_mapper() -> HashMap<u8, Vec<u8>> {
     let mut hash = HashMap::new();
     hash.insert(1, vec![82]);
     hash.insert(2, vec![83, 96, 95, 81, 68, 69]);
