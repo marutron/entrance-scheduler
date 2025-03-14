@@ -3,24 +3,26 @@ use crate::parser::config_parser::parse_config;
 use crate::parser::file_parser::parse_file;
 use std::error::Error;
 
+mod fresh_fuel_case;
 pub mod macros;
 mod mapper;
 mod parser;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let path = parse_config()?;
+    let (path, tasks) = parse_config()?;
     let position_hash = parse_file(path)?;
 
     for (key, val) in &position_hash {
         println!("{key} : {val:?}")
     }
 
-    let queue = convert_to_queue(&position_hash);
-
-    for itm in &queue {
-        println!("{itm}");
+    if let None = tasks {
+        let queue = convert_to_queue(&position_hash);
     }
 
-    println!("{}, {}", position_hash.values().len(), queue.len());
+    if let Some(tasks) = tasks {
+        println!("{tasks:?}")
+    }
+
     Ok(())
 }
