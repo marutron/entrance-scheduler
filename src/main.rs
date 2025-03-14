@@ -1,15 +1,15 @@
+use crate::parser::config_parser::parse_config;
+use crate::parser::file_parser::parse_file;
 use std::error::Error;
-use crate::file_parser::parser;
 
-mod file_parser;
-
+mod parser;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let path = "scheme.txt";
-    let position_hash = parser(path)?;
+    let path = parse_config()?;
+    let position_hash = parse_file(path)?;
 
     for (key, val) in position_hash {
         println!("{key} : {val:?}")
-    };
+    }
     Ok(())
 }

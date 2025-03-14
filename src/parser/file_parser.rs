@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::{self, BufRead, Result};
+use std::io::{BufRead, BufReader, Result};
 
 /// Парсит входной файл
 ///
@@ -12,14 +12,14 @@ use std::io::{self, BufRead, Result};
 ///
 /// В случае невозможности распарсить строку файла.
 /// Выводит в печать её номер и содержание.
-pub fn parser(path: &str) -> Result<HashMap<String, Vec<u8>>> {
+pub fn parse_file(path: String) -> Result<HashMap<String, Vec<u8>>> {
     let file = File::open(path)?;
-    let reader = io::BufReader::new(file);
+    let reader = BufReader::new(file);
 
     let mut position_hash: HashMap<String, Vec<u8>> = HashMap::new();
     let mut vec: Vec<u8> = vec![];
     let mut percent: String = "".to_string();
-    let mut i = 0;  // порядковый номер строки
+    let mut i = 0; // порядковый номер строки
 
     for line in reader.lines() {
         let line = line?;
