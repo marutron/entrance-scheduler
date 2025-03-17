@@ -1,5 +1,3 @@
-use crate::tvs::TVS;
-
 #[macro_export]
 macro_rules! impl_get_field {
     ($($field: ident -> $r_type: ty), *) => {
