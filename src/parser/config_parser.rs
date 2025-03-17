@@ -3,7 +3,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader, Result};
 
 /// Парсит конфиг программы, полученный из файла config.txt
-pub fn parse_config() -> Result<(String, Option<[Task; 4]>)> {
+pub fn parse_config() -> Result<(String, String, Option<[Task; 4]>)> {
     let file = File::open("config.txt")?;
     let reader = BufReader::new(file);
 
@@ -19,6 +19,14 @@ pub fn parse_config() -> Result<(String, Option<[Task; 4]>)> {
         .filter_map(|s| Option::from(s.trim().to_string()))
         .collect();
     let path = vec[vec.len() - 1].clone();
+
+    let tvs_line = line_iter.next().unwrap()?;
+    let vec: Vec<String> = tvs_line
+        .split("=")
+        .filter_map(|s| Option::from(s.trim().to_string()))
+        .collect();
+    let tvs_path = vec[vec.len() - 1].clone();
+
     line_iter.next(); // blank line
 
     let mut tasks = None;
@@ -48,5 +56,5 @@ pub fn parse_config() -> Result<(String, Option<[Task; 4]>)> {
             }
         }
     }
-    Ok((path, tasks))
+    Ok((path, tvs_path, tasks))
 }

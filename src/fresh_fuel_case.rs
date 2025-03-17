@@ -1,17 +1,7 @@
 use crate::impl_get_field;
 use crate::parser::task::Task;
-
-struct TVS {
-    number: Option<String>,
-    percent: String,
-}
-
-impl TVS {
-    impl_get_field![
-        number -> Option<String>,
-        percent -> String
-    ];
-}
+use crate::tvs::TVS;
+use std::collections::HashSet;
 
 struct FFC {
     _1: Option<TVS>,
@@ -35,7 +25,7 @@ struct FFC {
 }
 
 impl FFC {
-    pub fn parse_from_task(task: Task) {}
+    pub fn parse_from_task(task: Task, tvs_pool: HashSet<TVS>) {}
 
     impl_get_field![
     _1 -> Option<TVS>,
