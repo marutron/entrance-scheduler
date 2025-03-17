@@ -3,6 +3,7 @@ use crate::parser::config_parser::parse_config;
 use crate::parser::file_parser::parse_file;
 use crate::parser::tvs::parse_tvs;
 use std::error::Error;
+use crate::fresh_fuel_case::FFC;
 
 mod fresh_fuel_case;
 pub mod macros;
@@ -14,6 +15,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let (path, tvs_path, tasks) = parse_config()?;
     let position_hash = parse_file(path)?;
     let tvs_pool = parse_tvs(&tvs_path);
+
+    // let ffc = FFC::fill();
 
     for (key, val) in &position_hash {
         println!("{key} : {val:?}")

@@ -1,3 +1,5 @@
+use crate::impl_get_field;
+
 #[derive(Debug)]
 pub struct Task {
     percent_1: f32,
@@ -38,4 +40,15 @@ impl Task {
             count_2: sort_2.1,
         }
     }
+
+    pub fn overall_count(&self) -> u8 {
+        self.count_1 + self.count_2
+    }
+
+    impl_get_field![
+        percent_1-> f32,
+        count_1-> u8,
+        percent_2-> Option<f32>,
+        count_2-> u8
+    ];
 }
