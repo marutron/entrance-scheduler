@@ -1,160 +1,121 @@
-use crate::{impl_get_field, impl_set_tvs_field};
 use crate::parser::task::Task;
 use crate::tvs::TVS;
-use std::collections::HashSet;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 pub struct FFC {
-    _1: Option<TVS>,
-    _2: Option<TVS>,
-    _3: Option<TVS>,
-    _4: Option<TVS>,
-    _5: Option<TVS>,
-    _6: Option<TVS>,
-    _7: Option<TVS>,
-    _8: Option<TVS>,
-    _9: Option<TVS>,
-    _10: Option<TVS>,
-    _11: Option<TVS>,
-    _12: Option<TVS>,
-    _13: Option<TVS>,
-    _14: Option<TVS>,
-    _15: Option<TVS>,
-    _16: Option<TVS>,
-    _17: Option<TVS>,
-    _18: Option<TVS>,
+    _1: Rc<RefCell<Option<TVS>>>,
+    _2: Rc<RefCell<Option<TVS>>>,
+    _3: Rc<RefCell<Option<TVS>>>,
+    _4: Rc<RefCell<Option<TVS>>>,
+    _5: Rc<RefCell<Option<TVS>>>,
+    _6: Rc<RefCell<Option<TVS>>>,
+    _7: Rc<RefCell<Option<TVS>>>,
+    _8: Rc<RefCell<Option<TVS>>>,
+    _9: Rc<RefCell<Option<TVS>>>,
+    _10: Rc<RefCell<Option<TVS>>>,
+    _11: Rc<RefCell<Option<TVS>>>,
+    _12: Rc<RefCell<Option<TVS>>>,
+    _13: Rc<RefCell<Option<TVS>>>,
+    _14: Rc<RefCell<Option<TVS>>>,
+    _15: Rc<RefCell<Option<TVS>>>,
+    _16: Rc<RefCell<Option<TVS>>>,
+    _17: Rc<RefCell<Option<TVS>>>,
+    _18: Rc<RefCell<Option<TVS>>>,
 }
 
 impl FFC {
-    fn set_16_iter(&mut self) -> Vec<Box<dyn FnMut(TVS)>> {
-        vec![
-            Box::new(move | tvs | self.set_1(tvs)),
-            Box::new(move | tvs | self.set_18(tvs)),
-            Box::new(move | tvs | self.set_3(tvs)),
-            Box::new(move | tvs | self.set_16(tvs)),
-            Box::new(move | tvs | self.set_8(tvs)),
-            Box::new(move | tvs | self.set_11(tvs)),
-            Box::new(move | tvs | self.set_2(tvs)),
-            Box::new(move | tvs | self.set_17(tvs)),
-            Box::new(move | tvs | self.set_4(tvs)),
-            Box::new(move | tvs | self.set_15(tvs)),
-            Box::new(move | tvs | self.set_5(tvs)),
-            Box::new(move | tvs | self.set_14(tvs)),
-            Box::new(move | tvs | self.set_6(tvs)),
-            Box::new(move | tvs | self.set_13(tvs)),
-            Box::new(move | tvs | self.set_9(tvs)),
-            Box::new(move | tvs | self.set_10(tvs)),
-        ]
-    }
-
-    fn set_17_iter(&mut self) -> Vec<Box<dyn FnMut(TVS)>> {
-        vec![
-            Box::new(move | tvs | self.set_1(tvs)),
-            Box::new(move | tvs | self.set_18(tvs)),
-            Box::new(move | tvs | self.set_3(tvs)),
-            Box::new(move | tvs | self.set_16(tvs)),
-            Box::new(move | tvs | self.set_8(tvs)),
-            Box::new(move | tvs | self.set_11(tvs)),
-            Box::new(move | tvs | self.set_2(tvs)),
-            Box::new(move | tvs | self.set_17(tvs)),
-            Box::new(move | tvs | self.set_7(tvs)),
-            Box::new(move | tvs | self.set_4(tvs)),
-            Box::new(move | tvs | self.set_15(tvs)),
-            Box::new(move | tvs | self.set_5(tvs)),
-            Box::new(move | tvs | self.set_14(tvs)),
-            Box::new(move | tvs | self.set_6(tvs)),
-            Box::new(move | tvs | self.set_13(tvs)),
-            Box::new(move | tvs | self.set_9(tvs)),
-            Box::new(move | tvs | self.set_10(tvs)),
-        ]
-    }
-
-    fn new () -> FFC {
+    pub(crate) fn new() -> FFC {
         FFC {
-            _1: None,
-            _2: None,
-            _3: None,
-            _4: None,
-            _5: None,
-            _6: None,
-            _7: None,
-            _8: None,
-            _9: None,
-            _10: None,
-            _11: None,
-            _12: None,
-            _13: None,
-            _14: None,
-            _15: None,
-            _16: None,
-            _17: None,
-            _18: None,
+            _1: Rc::new(RefCell::new(None)),
+            _2: Rc::new(RefCell::new(None)),
+            _3: Rc::new(RefCell::new(None)),
+            _4: Rc::new(RefCell::new(None)),
+            _5: Rc::new(RefCell::new(None)),
+            _6: Rc::new(RefCell::new(None)),
+            _7: Rc::new(RefCell::new(None)),
+            _8: Rc::new(RefCell::new(None)),
+            _9: Rc::new(RefCell::new(None)),
+            _10: Rc::new(RefCell::new(None)),
+            _11: Rc::new(RefCell::new(None)),
+            _12: Rc::new(RefCell::new(None)),
+            _13: Rc::new(RefCell::new(None)),
+            _14: Rc::new(RefCell::new(None)),
+            _15: Rc::new(RefCell::new(None)),
+            _16: Rc::new(RefCell::new(None)),
+            _17: Rc::new(RefCell::new(None)),
+            _18: Rc::new(RefCell::new(None)),
         }
     }
 
-    pub fn fill(task: Task, mut tvs_pool: HashSet<TVS>) {
-        let mut ffc = FFC::new();
-        let overall_count = task.overall_count();
-        let mut i = 0;
-        let mut iter = match overall_count {
-            16 => {ffc.set_17_iter().iter()}
-            17 => {ffc.set_17_iter().iter()}
-            _ => {panic!("Инициализирован Task на ЧСТ с количеством операций: {overall_count}")}
+    fn get_16(&mut self) -> [Rc<RefCell<Option<TVS>>>; 16] {
+        [
+            self._1.clone(),
+            self._18.clone(),
+            self._3.clone(),
+            self._16.clone(),
+            self._8.clone(),
+            self._11.clone(),
+            self._2.clone(),
+            self._17.clone(),
+            self._4.clone(),
+            self._15.clone(),
+            self._5.clone(),
+            self._14.clone(),
+            self._6.clone(),
+            self._13.clone(),
+            self._9.clone(),
+            self._10.clone(),
+        ]
+    }
+
+    fn get_17(&mut self) -> [Rc<RefCell<Option<TVS>>>; 17] {
+        [
+            self._1.clone(),
+            self._18.clone(),
+            self._3.clone(),
+            self._16.clone(),
+            self._8.clone(),
+            self._11.clone(),
+            self._2.clone(),
+            self._17.clone(),
+            self._7.clone(),
+            self._4.clone(),
+            self._15.clone(),
+            self._5.clone(),
+            self._14.clone(),
+            self._6.clone(),
+            self._13.clone(),
+            self._9.clone(),
+            self._10.clone(),
+        ]
+    }
+}
+
+pub fn fill(task: &Task, tvs_pool: &mut Vec<TVS>) {
+    let mut ffc = FFC::new();
+    let mut load_queue = ffc.get_16();
+    let mut iter = load_queue.into_iter();
+    let mut i = 0u8;
+
+    while let Some(cell) = iter.next() {
+        let tvs = if i < *task.count_1() {
+            get_tvs(task.percent_1().clone(), tvs_pool)
+        } else {
+            get_tvs(task.percent_2().unwrap(), tvs_pool)
         };
-        while i < overall_count {
-            let tvs: TVS = {
-                let mut tvs = TVS::new("".to_string(), "".to_string(), 0.0);
-                for item in &tvs_pool {
-                    if item.percent() == task.percent_1() {
-                        tvs = tvs_pool.take(&item).unwrap();
-                    }
-                };
-                assert_ne!(*tvs.percent(), 0.0);
-                tvs
-            };
-            iter.next().unwrap()(tvs);
-            i += 1;
+
+        let mut cell_mut = cell.borrow_mut();
+        *cell_mut = Some(tvs);
+        i += 1;
+    }
+}
+
+fn get_tvs(percent: f32, tvs_pool: &mut Vec<TVS>) -> TVS {
+    for i in 0..tvs_pool.len() {
+        if *tvs_pool[i].percent() == percent {
+            return tvs_pool.remove(i);
         }
     }
-
-    impl_get_field![
-    _1 -> Option<TVS>,
-    _2 -> Option<TVS>,
-    _3 -> Option<TVS>,
-    _4 -> Option<TVS>,
-    _5 -> Option<TVS>,
-    _6 -> Option<TVS>,
-    _7 -> Option<TVS>,
-    _8 -> Option<TVS>,
-    _9 -> Option<TVS>,
-    _10 -> Option<TVS>,
-    _11 -> Option<TVS>,
-    _12 -> Option<TVS>,
-    _13 -> Option<TVS>,
-    _14 -> Option<TVS>,
-    _15 -> Option<TVS>,
-    _16 -> Option<TVS>,
-    _17 -> Option<TVS>,
-    _18 -> Option<TVS>
-    ];
-
-    impl_set_tvs_field![
-        set_1, _1,
-        set_2, _2,
-        set_3, _3,
-        set_4, _4,
-        set_5, _5,
-        set_6, _6,
-        set_7, _7,
-        set_8, _8,
-        set_9, _9,
-        set_10, _10,
-        set_11, _11,
-        set_12, _12,
-        set_13, _13,
-        set_14, _14,
-        set_15, _15,
-        set_16, _16,
-        set_17, _17,
-        set_18, _18
-    ];
+    panic!()
 }
