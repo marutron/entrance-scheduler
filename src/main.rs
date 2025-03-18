@@ -12,18 +12,19 @@ pub mod tvs;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let (path, tvs_path, tasks) = parse_config()?;
-    let position_hash = parse_file(path)?;
+    // вызывается в случае отсутствия готовых tasks
+    // let position_hash = parse_file(path)?;
     let mut tvs_pool = parse_tvs(&tvs_path)?;
+    let mut cases = vec![];
 
     if let Some(tasks) = tasks {
+        let mut ffc_num = 1;
         for task in tasks {
-            fill(&task, &mut tvs_pool);
+            let ffc = fill(ffc_num.clone(), &task, &mut tvs_pool);
+            println!("{ffc}");
+            cases.push(ffc);
+            ffc_num += 1
         }
     }
-
-    for (key, val) in &position_hash {
-        println!("{key} : {val:?}")
-    }
-
     Ok(())
 }

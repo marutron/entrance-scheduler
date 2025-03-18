@@ -1,4 +1,5 @@
 use crate::impl_get_field;
+use std::fmt::{Display, Formatter};
 
 #[derive(Debug)]
 pub struct TVS {
@@ -21,4 +22,14 @@ impl TVS {
         container -> String,
         percent -> f32
     ];
+}
+
+impl Display for TVS {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "ТВС [number: {}, container: {}]",
+            self.number, self.container,
+        )
+    }
 }

@@ -1,9 +1,11 @@
 use crate::parser::task::Task;
 use crate::tvs::TVS;
 use std::cell::RefCell;
+use std::fmt::{Display, Formatter};
 use std::rc::Rc;
 
 pub struct FFC {
+    number: u8,
     _1: Rc<RefCell<Option<TVS>>>,
     _2: Rc<RefCell<Option<TVS>>>,
     _3: Rc<RefCell<Option<TVS>>>,
@@ -25,8 +27,9 @@ pub struct FFC {
 }
 
 impl FFC {
-    pub(crate) fn new() -> FFC {
+    pub(crate) fn new(number: u8) -> FFC {
         FFC {
+            number,
             _1: Rc::new(RefCell::new(None)),
             _2: Rc::new(RefCell::new(None)),
             _3: Rc::new(RefCell::new(None)),
@@ -48,8 +51,8 @@ impl FFC {
         }
     }
 
-    fn get_16(&mut self) -> [Rc<RefCell<Option<TVS>>>; 16] {
-        [
+    fn get_16(&mut self) -> Vec<Rc<RefCell<Option<TVS>>>> {
+        vec![
             self._1.clone(),
             self._18.clone(),
             self._3.clone(),
@@ -69,8 +72,8 @@ impl FFC {
         ]
     }
 
-    fn get_17(&mut self) -> [Rc<RefCell<Option<TVS>>>; 17] {
-        [
+    fn get_17(&mut self) -> Vec<Rc<RefCell<Option<TVS>>>> {
+        vec![
             self._1.clone(),
             self._18.clone(),
             self._3.clone(),
@@ -92,9 +95,63 @@ impl FFC {
     }
 }
 
-pub fn fill(task: &Task, tvs_pool: &mut Vec<TVS>) {
-    let mut ffc = FFC::new();
-    let mut load_queue = ffc.get_16();
+impl Display for FFC {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "ЧСТ № {} (условно) [\n\
+                1: {:?},\n \
+                2: {:?},\n \
+                3: {:?},\n \
+                4: {:?},\n \
+                5: {:?},\n \
+                6: {:?},\n \
+                7: {:?},\n \
+                8: {:?},\n \
+                9: {:?},\n \
+                10: {:?},\n \
+                11: {:?},\n \
+                12: {:?},\n \
+                13: {:?},\n \
+                14: {:?},\n \
+                15: {:?},\n \
+                16: {:?},\n \
+                17: {:?},\n \
+                18: {:?},\n \
+            ]",
+            self.number,
+            self._1.borrow(),
+            self._2.borrow(),
+            self._3.borrow(),
+            self._4.borrow(),
+            self._5.borrow(),
+            self._6.borrow(),
+            self._7.borrow(),
+            self._8.borrow(),
+            self._9.borrow(),
+            self._10.borrow(),
+            self._11.borrow(),
+            self._12.borrow(),
+            self._13.borrow(),
+            self._14.borrow(),
+            self._15.borrow(),
+            self._16.borrow(),
+            self._17.borrow(),
+            self._18.borrow(),
+        )
+    }
+}
+
+pub fn fill(ffc_number: u8, task: &Task, tvs_pool: &mut Vec<TVS>) -> FFC {
+    let mut ffc = FFC::new(ffc_number);
+    let mut load_queue = match task.overall_count() {
+        16 => ffc.get_16(),
+        17 => ffc.get_17(),
+        _ => {
+            panic!()
+        }
+    };
+
     let mut iter = load_queue.into_iter();
     let mut i = 0u8;
 
@@ -109,6 +166,7 @@ pub fn fill(task: &Task, tvs_pool: &mut Vec<TVS>) {
         *cell_mut = Some(tvs);
         i += 1;
     }
+    ffc
 }
 
 fn get_tvs(percent: f32, tvs_pool: &mut Vec<TVS>) -> TVS {
