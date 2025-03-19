@@ -99,7 +99,7 @@ impl Display for FFC {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "ЧСТ № {} (условно) [\n\
+            "ЧСТ № {} (условно) [\n \
                 1: {:?},\n \
                 2: {:?},\n \
                 3: {:?},\n \
@@ -144,7 +144,7 @@ impl Display for FFC {
 
 pub fn fill(ffc_number: u8, task: &Task, tvs_pool: &mut Vec<TVS>) -> FFC {
     let mut ffc = FFC::new(ffc_number);
-    let mut load_queue = match task.overall_count() {
+    let load_queue = match task.overall_count() {
         16 => ffc.get_16(),
         17 => ffc.get_17(),
         _ => {

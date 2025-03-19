@@ -33,7 +33,6 @@ pub fn parse_config() -> Result<(String, String, Option<[Task; 4]>)> {
     if let Some(queue_line) = line_iter.next() {
         if let Ok(queue_line) = queue_line {
             if queue_line == "queue:".to_string() {
-                println!("{queue_line:?}");
                 let first = line_iter
                     .next()
                     .unwrap_or_else(|| panic!("Отсутствует первая строка после queue"))?;
